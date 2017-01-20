@@ -138,7 +138,13 @@ class Site(id: String, val appDefinition: AppDefinition) : IdentifiableParent<Pa
         }
     }
 
-    internal fun _getExistingPage(existingId: String): Page {
+    /**
+     * Internal Use: Get an existing defined Page from the Site.
+
+     * @param existingId the existing page identifier.
+     * @return the existing page if it exists.
+     */
+    fun getExistingPage(existingId: String): Page {
         val existingPage = children.filter { it.id == existingId }.firstOrNull()?:let {
             val page = siteDefinitionDAO.getSiteByDescription(id)?.let {
                 siteDefinitionDAO.getPageByName(it, existingId)
@@ -154,7 +160,7 @@ class Site(id: String, val appDefinition: AppDefinition) : IdentifiableParent<Pa
             if(dep != null) {
                 for(depSite in dep.getSites()) {
                     try{
-                        return@let depSite._getExistingPage(existingId)
+                        return@let depSite.getExistingPage(existingId)
                     }catch (ignore: IllegalStateException) {
                         logger.debug("Unable to find page in site: $depSite.id", ignore)
                     }
@@ -165,7 +171,7 @@ class Site(id: String, val appDefinition: AppDefinition) : IdentifiableParent<Pa
     }
 
     /**
-     * Provide a java.util.prefs.Preferences key to store the [net.proteusframework.cms.CmsSite.getId].
+     * Provide a [java.util.prefs.Preferences] key to store the [net.proteusframework.cms.CmsSite.getId].
      * @param the key. Must follow [java.util.prefs.Preferences] constraints like key length.
      */
     fun storeSitePreference(key: String) {
@@ -277,7 +283,7 @@ class Site(id: String, val appDefinition: AppDefinition) : IdentifiableParent<Pa
      */
     fun hostname(address: String, existingWelcomePageId: String) {
         siteConstructedCallbacks.add({site ->
-            val page = _getExistingPage(existingWelcomePageId)
+            val page = getExistingPage(existingWelcomePageId)
             hostnames.add(Hostname(address, page))
         })
     }

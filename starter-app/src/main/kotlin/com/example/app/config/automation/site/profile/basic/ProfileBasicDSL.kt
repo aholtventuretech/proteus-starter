@@ -48,7 +48,7 @@ open class ProfileBasicDSL : AppDefinition("Profile Basic", version = 1, siteId 
         javaScript("templates/main.min.js")
         css("vendor/select2.min.css")
         css("templates/template--base.min.css")
-        layout("Header, Main, Footer") {
+        layout("Header, Body, Footer") {
             box("Enclosing") {
                 htmlId = "e-content"
                 htmlClass = "enclosing"
@@ -91,7 +91,7 @@ open class ProfileBasicDSL : AppDefinition("Profile Basic", version = 1, siteId 
         css("vendor/select2.min.css")
         css("templates/template--base.min.css")
         css("templates/font-awesome.min.css")
-        layout("Header, Main, Footer")
+        layout("Header, Body, Footer")
         content("Header", "Logo & Menu Toggle")
         content("Header", ScriptedGenerator("Company Selector")) {
             script("CompanySelectorScript.groovy")
